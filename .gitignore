@@ -1,0 +1,50 @@
+# Environment variables
+.env
+
+# Docker files (if not intended to be shared in this specific public repo context)
+# If they are part of the project setup for others, keep them. Otherwise, ignore.
+# Dockerfile
+# docker-compose.yml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+pip-wheel-metadata/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE / Editor specific
+.vscode/
+.idea/
+*.swp
+*~
+
+# Output files
+*.log
+*.out
+postgres_schema_details.md
+list_mongo_collections.py
+
+
+# local_schema.md # Example if you generate other schema files
+# stage_schema.md # Example if you generate other schema files
+
+# Other potentially sensitive or large files
+# data/ # If you have a local data directory for testing
+# *.sqlite3 # If using sqlite for local tests

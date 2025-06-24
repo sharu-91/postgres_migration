@@ -1,0 +1,13 @@
+ALTER TABLE public.telecaller_guidance_rows OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.user_feed_back OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.telecaller_guidance_metadata OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.telecaller_customer_guidance_rows OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.rule_flows_rows OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.rule_flow_metadata OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.rule_engine_rows OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.rule_engine_metadata OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.n8n_chat_histories OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.image_metadata OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.embedding_collections OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.document_rows OWNER TO qa_sharan_shetty_rw;
+ALTER TABLE public.document_metadata OWNER TO qa_sharan_shetty_rw;
