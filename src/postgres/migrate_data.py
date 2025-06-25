@@ -10,44 +10,7 @@ from src.postgres.config import LOCAL_DB, STAGE_DB
 
 # Hardcoded list of tables to migrate
 TABLES_TO_MIGRATE = [
-    "annotation_configs",
-    "dataset_examples",
-    "dataset_versions",
-    "datasets",
-    "document_metadata",
-    "document_rows",
-    "documents_768",
-    "embedding_collections",
-    "feedback_768",
-    "image_metadata",
-    "mem0",
-    "mem0migrations",
-    "n8n_chat_histories",
-    "project_sessions",
-    "project_trace_retention_policies",
-    "projects",
-    "prompt_labels",
-    "prompt_version_tags",
-    "prompt_versions",
-    "prompts",
-    "prompts_prompt_labels",
-    "rule_engine_768",
-    "rule_engine_metadata",
-    "rule_engine_rows",
-    "rule_flow_768",
-    "rule_flow_metadata",
-    "rule_flows_rows",
-    "rule_mapping_768",
-    "spans",
-    "telecaller_customer_guidance_768",
-    "telecaller_customer_guidance_rows",
-    "telecaller_guidance_metadata",
-    "telecaller_guidance_rows",
-    "trace_annotations",
-    "traces",
-    "user_feed_back",
-    "user_roles",
-    "users"
+   
 ]
 
 def migrate_data_with_copy(local_cursor, stage_cursor, table):
