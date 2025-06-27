@@ -8,10 +8,18 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 from src.postgres.config import LOCAL_DB, STAGE_DB
 
+<<<<<<< HEAD
 # Hardcoded list of tables to migrate
 TABLES_TO_MIGRATE = [
    
 ]
+=======
+def get_tables_to_migrate(file_path="tables.txt"):
+    """Reads the list of tables to migrate from a file."""
+    with open(file_path, 'r') as f:
+        tables = [line.strip() for line in f.readlines()]
+    return tables
+>>>>>>> 6678a9f (mysql migration script and removed hardcoded table listing in migrate data)
 
 def migrate_data_with_copy(local_cursor, stage_cursor, table):
     logging.info(f"Starting migration for table: {table} using COPY")
@@ -52,7 +60,8 @@ def migrate_data():
         stage_cursor = stage_conn.cursor()
         logging.info("Successfully connected to staging database.")
 
-        for table in TABLES_TO_MIGRATE:
+        tables_to_migrate = get_tables_to_migrate()
+        for table in tables_to_migrate:
             try:
                 migrate_data_with_copy(local_cursor, stage_cursor, table)
 

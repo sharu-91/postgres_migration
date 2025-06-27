@@ -1,6 +1,6 @@
 # How to Run This Project
 
-This document provides instructions on how to set up and run the PostgreSQL utility scripts.
+This document provides instructions on how to set up and run the database utility scripts.
 
 ## Prerequisites
 
@@ -13,7 +13,11 @@ This document provides instructions on how to set up and run the PostgreSQL util
     *   On Debian/Ubuntu: `sudo apt-get install libpq-dev postgresql-client`
     *   On macOS (using Homebrew): `brew install postgresql libpq` (ensure `pg_dump` from the installed PostgreSQL is in your PATH)
     *   On Windows: Install the PostgreSQL binaries which include `pg_dump`.
-4.  **SSH Access (for Stage Database)**: If you intend to connect to the stage database and it's behind an SSH tunnel (as configured by default in `.env`), ensure you have SSH access to the tunnel server and the tunnel is active. The `.env` file contains an example SSH command.
+4.  **MySQL Client**: `mysql-connector-python` requires MySQL client libraries. Ensure they are installed on your system.
+    *   On Debian/Ubuntu: `sudo apt-get install default-libmysqlclient-dev`
+    *   On macOS (using Homebrew): `brew install mysql-client`
+    *   On Windows: Install the MySQL Installer, which includes the client libraries.
+5.  **SSH Access (for Stage Database)**: If you intend to connect to the stage database and it's behind an SSH tunnel (as configured by default in `.env`), ensure you have SSH access to the tunnel server and the tunnel is active. The `.env` file contains an example SSH command.
 
 ## Setup
 
@@ -73,7 +77,7 @@ This document provides instructions on how to set up and run the PostgreSQL util
 
 ## Running the Utility (`main.py`)
 
-The `main.py` script provides a command-line interface to interact with the PostgreSQL utilities.
+The `main.py` script provides a command-line interface to interact with the database utilities.
 
 **General Usage**:
 ```bash
@@ -84,35 +88,46 @@ python main.py <command> [options]
 
 1.  **`list-tables`**: Lists tables from the specified database.
     *   **Arguments**:
-        *   `db_type`: `local` (uses `information_schema`) or `stage`.
+        *   `db_type`: `pg-local`, `pg-stage`, or `mysql`.
     *   **Examples**:
         ```bash
-        python main.py list-tables local
-        python main.py list-tables stage
+        python main.py list-tables pg-local
+        python main.py list-tables pg-stage
+        python main.py list-tables mysql
         ```
-        *(For `stage`, ensure SSH tunnel is active if configured to connect via `localhost`)*
+        *(For `pg-stage`, ensure SSH tunnel is active if configured to connect via `localhost`)*
 
-2.  **`generate-schema`**: Generates a markdown file (`.md`) containing a **full schema dump** (using `pg_dump`) for the specified database. This includes tables, functions, extensions, etc.
-    *   **Prerequisite**: `pg_dump` command must be installed and in your system's PATH.
+2.  **`generate-schema`**: Generates a markdown file (`.md`) containing a **full schema dump** for the specified database.
+    *   **Prerequisites**: `pg_dump` or `mysqldump` command must be installed and in your system's PATH.
     *   **Arguments**:
-        *   `db_type`: `local` or `stage`.
-        *   `--output <filename>`: (Optional) Specifies the output file name. Defaults to `postgres_schema_details.md`.
+        *   `db_type`: `pg-local`, `pg-stage`, or `mysql`.
+        *   `--output <filename>`: (Optional) Specifies the output file name.
     *   **Examples**:
         ```bash
-        uv run main.py generate-schema local
-        uv run main.py generate-schema stage --output custom_stage_schema.md
+        uv run main.py generate-schema pg-local
+        uv run main.py generate-schema pg-stage --output custom_stage_schema.md
+        uv run main.py generate-schema mysql
         ```
-        *(For `stage`, ensure SSH tunnel is active if configured to connect via `localhost`)*
+        *(For `pg-stage`, ensure SSH tunnel is active if configured to connect via `localhost`)*
 
-3.  **`migrate-data`**: Migrates data from the local PostgreSQL database to the stage PostgreSQL database.
-    *   **Important**: This operation will **TRUNCATE** tables in the stage database before migrating data.
+3.  **`migrate`**: Migrates data from one database to another.
+    *   **Important**: This operation will **TRUNCATE** tables in the destination database before migrating data.
     *   **Arguments**:
+        *   `migration_type`: `pg-local-to-stage` or `mysql-to-pg-local`.
         *   `--confirm`: Required to proceed with the migration. You will be asked for a final 'yes/no' confirmation in the terminal.
-    *   **Example**:
+        *   `--tables`: (Optional) A space-separated list of specific tables to migrate. If not provided, all tables from `tables.txt` will be migrated.
+    *   **Examples**:
         ```bash
-        python main.py migrate-data --confirm
+        # Migrate all tables from local PostgreSQL to stage PostgreSQL
+        python main.py migrate pg-local-to-stage --confirm
+
+        # Migrate all tables from MySQL to local PostgreSQL
+        python main.py migrate mysql-to-pg-local --confirm
+
+        # Migrate only specific tables from MySQL to local PostgreSQL
+        python main.py migrate mysql-to-pg-local --confirm --tables component_log durability_log_data
         ```
-        *(Ensure SSH tunnel is active if configured to connect via `localhost` for the stage database)*
+        *(For `pg-local-to-stage`, ensure SSH tunnel is active if configured to connect via `localhost` for the stage database)*
 
 ### Establishing SSH Tunnel (Example)
 

@@ -1,8 +1,8 @@
 import psycopg2
 from src.postgres.config import STAGE_DB
 
-def list_stage_tables():
-    """Connects to the staging PostgreSQL database and lists the tables."""
+def list_stage_tables(output_file="tables.txt"):
+    """Connects to the staging PostgreSQL database and writes the table list to a file."""
     conn = None
     try:
         conn = psycopg2.connect(**STAGE_DB)
@@ -14,9 +14,10 @@ def list_stage_tables():
             ORDER BY table_name;
         """)
         tables = cursor.fetchall()
-        print(f"Tables in database '{STAGE_DB['database']}':")
-        for table in tables:
-            print(table[0])
+        with open(output_file, 'w') as f:
+            for table in tables:
+                f.write(f"{table[0]}\n")
+        print(f"Table list saved to {output_file}")
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
